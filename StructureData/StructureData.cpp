@@ -63,68 +63,60 @@ int correctNumber(int left, int right) {
 int** indexation(Participant participants[], int countParticipants, string index, string upOrDown)
 {
 	int** array = new int* [countParticipants];
-	for (int i = 0; i < countParticipants; ++i) {
-		array[i] = new int[2];
-	}
-	int indexs[sizeof(participants)];
-	int counter = 0;
-	for (int i = 0; i < countParticipants; i++)
+	if (index == "number")
 	{
-		int min = 1111111111;
-		int max = -1111111111;
-		int indexMin;
-		int indexMax;
-		if (upOrDown == "up") 
+		for (int i = 0; i < countParticipants; ++i)
 		{
-			for (int i = 0; i < countParticipants; i++)
-			{
-				if (index == "number")
-				{
-					if ((participants[i].number < min) && !(find(begin(indexs), end(indexs), i) != end(indexs)))
-					{
-						min = participants[i].number;
-						indexMin = i;
-					}
-				}
-				else if (index == "score")
-				{
-					if ((participants[i].score < min) && !(find(begin(indexs), end(indexs), i) != end(indexs)))
-					{
-						min = participants[i].score;
-						indexMin = i;
-					}
-				}
-			}
-			array[counter][0] = min;
-			array[counter][1] = indexMin;
-			indexs[counter] = indexMin;
-			counter++;
+			array[i] = new int[2];
+			array[i][0] = participants[i].number;
+			array[i][1] = i;
 		}
-		else if (upOrDown == "down")
+	}
+	else if (index == "score")
+	{
+		for (int i = 0; i < countParticipants; ++i)
 		{
-			for (int i = 0; i < countParticipants; i++)
+			array[i] = new int[2];
+			array[i][0] = participants[i].score;
+			array[i][1] = i;
+		}
+	}
+	if (upOrDown == "up") 
+	{
+		for (int i = 0; i < countParticipants; i++)
+		{
+			bool flag = true;
+			for (int j = 0; j < countParticipants - (i + 1); j++)
 			{
-				if (index == "number")
+				if (array[j][0] > array[j + 1][0])
 				{
-					if ((participants[i].number > max) && !(find(begin(indexs), end(indexs), i) != end(indexs)))
-					{
-						max = participants[i].number;
-						indexMax = i;
-					}
-				}
-				else if (index == "score")
-				{
-					if ((participants[i].score > max) && !(find(begin(indexs), end(indexs), i) != end(indexs)))
-					{
-						max = participants[i].score;
-						indexMax = i;
-					}
+					flag = false;
+					swap(array[j], array[j + 1]);
 				}
 			}
-			array[counter][0] = max;
-			array[counter][1] = indexMax;
-			indexs[counter] = indexMax;
-			counter++;
+			if (flag)
+			{
+				break;
+			}
+		}
+	}
+	else if (upOrDown == "down")
+	{
+		for (int i = 0; i < countParticipants; i++)
+		{
+			bool flag = true;
+			for (int j = 0; j < countParticipants - (i + 1); j++)
+			{
+				if (array[j][0] < array[j + 1][0])
+				{
+					flag = false;
+					swap(array[j], array[j + 1]);
+				}
+			}
+			if (flag)
+			{
+				break;
+			}
 		}
 	}
 	return array;
